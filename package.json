@@ -29,5 +29,9 @@
     "presets": [
       "es2015"
     ]
+  },
+  "dependencies": {
+    "live-server": "^1.2.1",
+    "underscore": "^1.9.1"
   }
 }

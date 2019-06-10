@@ -33,13 +33,8 @@ exports.requestHandler = function(request, response) {
     'Serving request type ' + request.method + ' for url ' + request.url
   );
 
-  
-
-
-
   // The outgoing status.
   var statusCode = 200;
-
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
 
@@ -53,6 +48,8 @@ exports.requestHandler = function(request, response) {
   // which includes the status and all headers.
   response.writeHead(statusCode, headers);
 
+  // console.log('statusCode:', statusCode, 'headers:', headers);
+
   // Make sure to always call response.end() - Node may not send
   // anything back to the client until you do. The string you pass to
   // response.end() will be the body of the response - i.e. what shows
@@ -60,7 +57,17 @@ exports.requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  response.end('Hello, World!');
+  if (request.method === 'GET' && request.url === '/classes/messages') {
+    //response.writeHead((statusCode = 200));
+    response.writeHead(200, headers);
+    response.end(JSON.stringify({ results: [] }));
+  }
+  if (request.method === 'POST') {
+    response.end(JSON.stringify({ results: [] }));
+  } else {
+    response.writeHead(404, headers);
+  }
+  // response.end('Hello, World!');
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).

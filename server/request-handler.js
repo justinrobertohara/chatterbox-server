@@ -14,7 +14,7 @@ this file and include it in basic-server.js so that it actually works.
 
 // exports.messages = messages;
 
-exports.messages = [];
+var messages = [];
 
 exports.requestHandler = function(request, response) {
   // Request and Response come from node's http module.
@@ -61,31 +61,24 @@ exports.requestHandler = function(request, response) {
   // node to actually send all the data over to the client.
 
   if (request.method === 'GET' && request.url === '/classes/messages') {
-    //response.writeHead((statusCode = 200));
     statusCode = 200;
     response.writeHead(statusCode, headers);
-    console.log('***********messages********** \n', exports.messages);
-    response.end(
-      JSON.stringify({
-        results: exports.messages
-      })
-    );
-  }
-  if (request.method === 'POST' && request.url === '/classes/messages') {
-    statusCode = 201;
-
-    exports.messages.push(request._postData);
-    console.log('***********messages2********** \n', exports.messages);
-    response.writeHead(statusCode, headers);
-    //response._data.results = 'hello';
-    //response._data = messages;
-
-    response.end();
+    let data = JSON.stringify({ results: messages });
+    response.end(data);
+  } else if (request.method === 'POST' && request.url === '/classes/messages') {
+    let body = '';
+    request.on('data', chunk => {
+      body += chunk;
+    });
+    request.on('end', function() {
+      messages.push(JSON.parse(body));
+      response.writeHead(201);
+      response.end();
+    });
   } else {
     response.writeHead(404, headers);
+    response.end();
   }
-  //check check
-  // response.end('Hello, World!');
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).

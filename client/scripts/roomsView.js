@@ -1,41 +1,34 @@
 var RoomsView = {
 
-  $button: $('#rooms button'),
+  $button: $('#rooms .addRoom'),
   $select: $('#rooms select'),
 
   initialize: function() {
-
-    RoomsView.$select.on('change', RoomsView.handleChange);
-    RoomsView.$button.on('click', RoomsView.handleClick);
-      },
-
-  render: function() {
-
-    RoomsView.$select.html('');
-    Rooms
-      .items()
-      .each(RoomsView.renderRoom);
-    RoomsView.$select.val(Rooms.selected);
+    RoomsView.$button.on('click', Rooms.add);
   },
 
-  renderRoom: function(roomname) {
-    var $option = $('<option>').val(roomname).text(roomname);
-    RoomsView.$select.append($option);
+  //render: _.template(),
+
+  renderRoom: function(room) {
+    // var $newRoom = '<option>' + room + '</option>';
+    var roomClass = `${room}`;
+    roomClass = roomClass.split(' ').join('_');
+    RoomsView.$select.append(`<option class=${roomClass}> ${room} </option>`);
   },
 
-  handleChange: function(event) {
-    Rooms.selected = RoomsView.$select.val();
-    MessagesView.render();
-  },
 
-  handleClick: function(event) {
-    var roomname = prompt('Enter room name');
-    if (roomname) {
-      Rooms.add(roomname, () => {
-        RoomsView.render();
-        MessagesView.render();
-      });
-    }
-      }
 
 };
+
+/*
+  render: _.template(`
+      <option class=${room}>
+        <%- roomname%>
+      </option>
+    `)
+    
+    example:
+    <%- roomname%>
+
+    */
+

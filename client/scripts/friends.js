@@ -1,24 +1,32 @@
 var Friends = {
 
-
-  _data: new Set,
-
-  items: function() {
-    return _.chain([...Friends._data]);
-  },
-
-  isFriend: function(name) {
-    return Friends._data.has(name);
-  },
-
-  toggleStatus: function(name, callback = ()=>{}) {
-    if (Friends._data.has(name)) {
-      Friends._data.delete(name);
-      callback(false);
+  toggleStatus: function (user) {
+    event.preventDefault();
+    var friend = $.trim(user);
+    if (Friends.list.includes(friend)) {
+      var index = Friends.list.indexOf(friend);
+      Friends.list.splice(index, 1);
     } else {
-      Friends._data.add(name);
-      callback(true);
+      Friends.list.push(friend);
     }
-  }
-  
+    $('.username').each(function(elem) {
+      //go through each element that has a class of username
+      // if innerhtml of username = user
+      if ($(this).text() === user) {
+        $(this).toggleClass('friend');
+      }
+    });
+  },
+
+  list: []
+
 };
+
+/*
+iterate over chats with $.each()
+for each div in chats
+  for Friends.list.length
+    check to see if $(.userName) === Friends.list[i]
+      if it does
+        add the friend class to current chat div
+*/

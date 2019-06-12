@@ -13,23 +13,37 @@ var App = {
 
     // Fetch initial batch of messages
     App.startSpinner();
+    //App.stopSpinner();
     App.fetch(App.stopSpinner);
+    // App.fetch(MessagesView.renderMessage());
+    
 
+  },
+  lastMessage: null,
 
-    // Poll for new messages every 3 sec
-    setInterval(App.fetch, 3000);
-      },
+  clickOnFriends: function() {
+    $('.username').click(function() {
+      // var friend = $.trim($(this).text());
+      Friends.toggleStatus($(this).text());
+    });
+  }, 
 
-  fetch: function(callback = ()=>{}) {
+  fetch: function(callBack = ()=> {}) {
     Parse.readAll((data) => {
-
-      // Don't bother to update if we have no messages
-      if (!data.results || !data.results.length) { return; }
-
-      Rooms.update(data.results, RoomsView.render);
-      Messages.update(data.results, MessagesView.render);
-      
-      callback();
+      // examine the response from the server request:
+      console.log('data', data);
+      App.lastMessage = data.results[0].objectId;
+      for (let i = 0; i < data.results.length; i ++) {
+        if (!Rooms[data.results[i].roomname]) {
+          Rooms[data.results[i].roomname] = 1;
+          RoomsView.renderRoom(data.results[i].roomname);
+        } //need to deal with scenario where username is defined but roomname is not defined
+        if (data.results[i].username && data.results[i].roomname) {
+          MessagesView.renderMessage(data.results[i]);
+        }
+      }      
+      App.clickOnFriends();
+      callBack();
     });
   },
 

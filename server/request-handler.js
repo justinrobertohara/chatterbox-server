@@ -12,7 +12,9 @@ this file and include it in basic-server.js so that it actually works.
 
 **************************************************************/
 
-var exports = (module.exports = {});
+// exports.messages = messages;
+
+exports.messages = [];
 
 exports.requestHandler = function(request, response) {
   // Request and Response come from node's http module.
@@ -34,7 +36,7 @@ exports.requestHandler = function(request, response) {
   );
 
   // The outgoing status.
-  var statusCode = 200;
+  var statusCode = 404;
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
 
@@ -42,13 +44,13 @@ exports.requestHandler = function(request, response) {
   //
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
+  //maybe set this to application/json
   headers['Content-Type'] = 'text/plain';
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
-  response.writeHead(statusCode, headers);
 
-  // console.log('statusCode:', statusCode, 'headers:', headers);
+  // response.writeHead(statusCode, headers);
 
   // Make sure to always call response.end() - Node may not send
   // anything back to the client until you do. The string you pass to
@@ -57,16 +59,32 @@ exports.requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
+
   if (request.method === 'GET' && request.url === '/classes/messages') {
     //response.writeHead((statusCode = 200));
-    response.writeHead(200, headers);
-    response.end(JSON.stringify({ results: [] }));
+    statusCode = 200;
+    response.writeHead(statusCode, headers);
+    console.log('***********messages********** \n', exports.messages);
+    response.end(
+      JSON.stringify({
+        results: exports.messages
+      })
+    );
   }
-  if (request.method === 'POST') {
-    response.end(JSON.stringify({ results: [] }));
+  if (request.method === 'POST' && request.url === '/classes/messages') {
+    statusCode = 201;
+
+    exports.messages.push(request._postData);
+    console.log('***********messages2********** \n', exports.messages);
+    response.writeHead(statusCode, headers);
+    //response._data.results = 'hello';
+    //response._data = messages;
+
+    response.end();
   } else {
     response.writeHead(404, headers);
   }
+  //check check
   // response.end('Hello, World!');
 };
 

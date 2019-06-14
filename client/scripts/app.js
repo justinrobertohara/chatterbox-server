@@ -14,7 +14,7 @@ var App = {
     // Fetch initial batch of messages
     App.startSpinner();
     //App.stopSpinner();
-    //App.fetch(App.stopSpinner);
+    App.fetch(App.stopSpinner);
     // App.fetch(MessagesView.renderMessage());
     
 

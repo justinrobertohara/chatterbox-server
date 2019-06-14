@@ -16,6 +16,14 @@ this file and include it in basic-server.js so that it actually works.
 
 var messages = [];
 
+var defaultCorsHeaders = {
+  'access-control-request-headers': '*',
+  'access-control-allow-origin': '*',
+  'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'access-control-allow-headers': 'content-type, accept',
+  'access-control-max-age': 10 // Seconds.
+};
+
 exports.requestHandler = function(request, response) {
   // Request and Response come from node's http module.
   //
@@ -44,8 +52,9 @@ exports.requestHandler = function(request, response) {
   //
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
+
   //maybe set this to application/json
-  headers['Content-Type'] = 'text/plain';
+  headers['Content-Type'] = 'application/json';
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
@@ -72,9 +81,18 @@ exports.requestHandler = function(request, response) {
     });
     request.on('end', function() {
       messages.push(JSON.parse(body));
-      response.writeHead(201);
+      response.writeHead(201, headers);
       response.end();
     });
+  } else if (
+    request.method === 'OPTIONS' &&
+    request.url === '/classes/messages'
+  ) {
+    // headers['Access-Control-Allow-Origin'] = '*';
+    statusCode = 200;
+    response.writeHead(statusCode, headers);
+    console.log(headers);
+    response.end();
   } else {
     response.writeHead(404, headers);
     response.end();
@@ -90,9 +108,3 @@ exports.requestHandler = function(request, response) {
 //
 // Another way to get around this restriction is to serve you chat
 // client from this domain by setting up static file serving.
-var defaultCorsHeaders = {
-  'access-control-allow-origin': '*',
-  'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'access-control-allow-headers': 'content-type, accept',
-  'access-control-max-age': 10 // Seconds.
-};

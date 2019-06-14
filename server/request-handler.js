@@ -14,7 +14,9 @@ this file and include it in basic-server.js so that it actually works.
 
 // exports.messages = messages;
 
-var messages = [];
+var messages = [
+  { username: 'butts', text: 'ASFDAS!!!', roomname: 'undefined', objectId: '123' },
+];
 
 var defaultCorsHeaders = {
   'access-control-request-headers': '*',
@@ -80,7 +82,7 @@ exports.requestHandler = function(request, response) {
       body += chunk;
     });
     request.on('end', function() {
-      messages.push(JSON.parse(body));
+      messages.unshift(JSON.parse(body));
       response.writeHead(201, headers);
       response.end();
     });
@@ -91,7 +93,6 @@ exports.requestHandler = function(request, response) {
     // headers['Access-Control-Allow-Origin'] = '*';
     statusCode = 200;
     response.writeHead(statusCode, headers);
-    console.log(headers);
     response.end();
   } else {
     response.writeHead(404, headers);

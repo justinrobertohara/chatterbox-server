@@ -9,11 +9,12 @@ var Parse = {
       data: JSON.stringify(message),
       contentType: 'application/json',
       success: function(data) {
-        console.log('chatterbox: Message sent');
+        console.log(data);
+        console.log('chatterbox: Message sent', data);
       },
       error: function(data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
-        console.error('chatterbox: Failed to send message', data);
+        console.log('chatterbox: butts butts butts', data);
       }
     });
   },
@@ -28,7 +29,7 @@ var Parse = {
       error:
         errorCB ||
         function(error) {
-          console.error('chatterbox: Failed to fetch messages', error);
+          console.log('chatterbox: Failed to fetch messages', error);
         }
     });
   }

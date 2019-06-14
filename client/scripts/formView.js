@@ -1,11 +1,9 @@
 var FormView = {
-
   $form: $('form'),
 
   $newRoom: $('.newForm'),
 
   initialize: function() {
-    
     FormView.$form.on('submit', FormView.handleSubmit);
     FormView.$form.on('click', MessagesView.updateFeed);
     // FormView.$form.on('submit', Parse.create(Messages));
@@ -17,11 +15,21 @@ var FormView = {
     var text = $('#message').val();
     var currentRoom = $.trim($('#rooms option:selected').text());
     var userName = App.username;
+    var randomNum = '';
+    for (let i = 0; i < 3; i ++) {
+      var temp = Math.floor(Math.random() * 10);
+      randomNum += temp;  
+    }
     var message = {
       username: userName,
       text: text,
-      roomname: currentRoom
-    };   
+      roomname: currentRoom,
+      objectId: randomNum
+    };
+    console.log(
+      message,
+      'this is our message being sent from our handleSubmit'
+    );
     Parse.create(message);
   },
 
@@ -34,7 +42,7 @@ var FormView = {
       username: userName,
       text: 'Added room',
       roomname: roomname
-    };   
+    };
     Parse.create(message);
   },
 

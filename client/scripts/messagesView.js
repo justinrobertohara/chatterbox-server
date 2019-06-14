@@ -61,6 +61,11 @@ var MessagesView = {
       }
       App.lastMessage = data.results[0].objectId;
     });
+    // Parse.readAll((data) => {
+    //   for (let i = 0; i < data.results.length; i ++) {
+    //     MessagesView.updateRender(data.results[i]);
+    //   }
+    // });
   },
 
   updateRoom: function(selectedRoom) {

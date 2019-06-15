@@ -8,13 +8,13 @@ var Parse = {
       type: 'POST',
       data: JSON.stringify(message),
       contentType: 'application/json',
-      success: function(data) {
-        console.log(data);
-        console.log('chatterbox: Message sent', data);
-      },
       error: function(data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
         console.log('chatterbox: butts butts butts', data);
+      },
+      success: function(data) {
+        console.log(data);
+        console.log('chatterbox: Message sent', data);
       }
     });
   },

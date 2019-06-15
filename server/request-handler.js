@@ -13,9 +13,15 @@ this file and include it in basic-server.js so that it actually works.
 **************************************************************/
 
 // exports.messages = messages;
+const fs = require('fs');
 
 var messages = [
-  { username: 'butts', text: 'ASFDAS!!!', roomname: 'undefined', objectId: '123' },
+  {
+    username: 'butts',
+    text: 'ASFDAS!!!',
+    roomname: 'undefined',
+    objectId: '123'
+  }
 ];
 
 var defaultCorsHeaders = {
@@ -83,8 +89,9 @@ exports.requestHandler = function(request, response) {
     });
     request.on('end', function() {
       messages.unshift(JSON.parse(body));
+      headers['Content-Type'] = 'plain/text';
       response.writeHead(201, headers);
-      response.end();
+      response.end('you have posted your message!');
     });
   } else if (
     request.method === 'OPTIONS' &&
@@ -94,11 +101,27 @@ exports.requestHandler = function(request, response) {
     statusCode = 200;
     response.writeHead(statusCode, headers);
     response.end();
+  } else if (request.method === 'GET' && request.url === `${request.url}`) {
+    fs.readFile('./index.html', function(err, data) {
+      if (err) {
+        response.writeHead(404);
+        response.write('Not Found!');
+      } else {
+        headers['Content-Type'] = 'text/html';
+        response.writeHead(200, headers);
+        response.write(data);
+      }
+      response.end();
+    });
   } else {
     response.writeHead(404, headers);
     response.end();
   }
 };
+
+// console.log(
+//   'Serving request type ' + request.method + ' for url ' + request.url
+// );
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
 // This code allows this server to talk to websites that

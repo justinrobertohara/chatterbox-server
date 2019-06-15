@@ -26,11 +26,7 @@ var FormView = {
       roomname: currentRoom,
       objectId: randomNum
     };
-    console.log(
-      message,
-      'this is our message being sent from our handleSubmit'
-    );
-    Parse.create(message);
+    Parse.create(message, 'run a function');
   },
 
   handleNewRoom: function(event) {

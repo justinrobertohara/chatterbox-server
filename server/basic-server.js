@@ -1,5 +1,13 @@
 /* Import node's http module: */
 var http = require('http');
+const fs = require('fs');
+
+// fs.readFile('./index.html', (err, data) => {
+//   if (err) throw err;
+//   console.log(data);
+// });
+
+
 
 var handleRequest = require('./request-handler.js');
 // Every server needs to listen on a port with a unique number. The
@@ -20,8 +28,25 @@ var ip = '127.0.0.1';
 // incoming requests.
 //
 // After creating the server, we will tell it to listen on the given port and IP. */
+// var server = http.createServer(handleRequest.requestHandler);
+// console.log('Listening on http://' + ip + ':' + port);
+
+// fs.open('./index.html', 'r', (err, fd) => {
+//   if (err) throw err;
+//   fs.close(fd, (err) => {
+//     if (err) throw err;
+//   });
+// });
+
 var server = http.createServer(handleRequest.requestHandler);
 console.log('Listening on http://' + ip + ':' + port);
+
+// fs.open('./index.html', 'r', (err, fd) => {
+//   if (err) throw err;
+//   fs.close(fd, (err) => {
+//     if (err) throw err;
+//   });
+// });
 
 server.listen(port, ip);
 

@@ -33,7 +33,7 @@
   "dependencies": {
     "live-server": "^1.2.1",
     "nodemon": "^1.19.1",
-    "underscore": "^1.9.1",
+    "underscore": "^1.12.1",
     "jquery": "^3.3.1"
   }
 }
